@@ -33,19 +33,20 @@ class Resource:
 
 
 class Networks(Resource):
-    uri = '/v2/networks'
+    uri = "/v2/networks"
 
     def parse(self, data):
-        return [model.Network.from_dict(n) for n in data['networks']]
+        return [model.Network.from_dict(n) for n in data["networks"]]
 
     def near(self, lat, lng):
         def getter(network):
             return (network.location.latitude, network.location.longitude)
+
         return dist_sort([lat, lng], self._repr, getter)
 
 
 class Network(Resource):
-    uri = '/v2/networks/{uid}'
+    uri = "/v2/networks/{uid}"
 
     def __init__(self, *args, uid, **kwargs):
         self.uid = uid
@@ -56,18 +57,18 @@ class Network(Resource):
         return urljoin(self.client.endpoint, self.uri.format(uid=self.uid))
 
     def parse(self, data):
-        return model.Network.from_dict(data['network'])
+        return model.Network.from_dict(data["network"])
 
     def near(self, lat, lng):
         def getter(station):
             return (station.latitude, station.longitude)
+
         return dist_sort([lat, lng], self._repr.stations, getter)
 
 
 class Client:
     DEFAULT_ENDPOINT = "https://api.citybik.es/"
-    USER_AGENT = 'python-citybikes/{version}'.format(version=_version)
-
+    USER_AGENT = "python-citybikes/{version}".format(version=_version)
 
     _networks_list = None
     _networks = None
@@ -89,13 +90,13 @@ class Client:
 
     @property
     def networks(self):
-        """ Singleton networks """
+        """Singleton networks"""
         if not self._networks_list:
             self._networks_list = Networks(self)
         return self._networks_list
 
     def network(self, uid):
-        """ Singleton network """
+        """Singleton network"""
         if uid not in self._networks:
             self._networks[uid] = Network(self, uid=uid)
         return self._networks[uid]

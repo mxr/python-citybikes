@@ -5,6 +5,7 @@ from citybikes.asyncio import Client
 
 from . import mockresponses
 
+
 @pytest_asyncio.fixture
 async def server(aiohttp_server):
     async def networks(request):
@@ -14,14 +15,14 @@ async def server(aiohttp_server):
         return web.json_response(mockresponses.network)
 
     app = web.Application()
-    app.router.add_get('/v2/networks', networks)
-    app.router.add_get('/v2/networks/foo', network)
+    app.router.add_get("/v2/networks", networks)
+    app.router.add_get("/v2/networks/foo", network)
     server = await aiohttp_server(app)
     yield server
 
 
 @pytest_asyncio.fixture
 async def client(server):
-    cli = Client(endpoint=str(server.make_url('/')))
+    cli = Client(endpoint=str(server.make_url("/")))
     yield cli
     await cli.close()

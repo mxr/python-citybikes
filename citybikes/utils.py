@@ -2,7 +2,7 @@ from math import hypot
 
 
 def distance(xy, xy2):
-    """ Gets euclidian distance between two pairs of points (x, y)
+    """Gets euclidian distance between two pairs of points (x, y)
     :param xy: pair (x, y)
     :param xy2: pair (x, y)
     :return: float
@@ -12,7 +12,7 @@ def distance(xy, xy2):
 
 
 def dist_sort(xy, locations, getter):
-    """ Sorts a list of objects by distance to x, y
+    """Sorts a list of objects by distance to x, y
     :param xy: pair (x, y)
     :param locations: list of things to sort
     :param getter: function(location) must return pair (x, y)
@@ -21,5 +21,5 @@ def dist_sort(xy, locations, getter):
     """
     return sorted(
         map(lambda loc: [loc, distance(xy, getter(loc))], locations),
-        key=lambda locdst: locdst[1]
+        key=lambda locdst: locdst[1],
     )

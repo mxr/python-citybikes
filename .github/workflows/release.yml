@@ -28,7 +28,10 @@ jobs:
         uv export --only-group=dev | pip install -r /dev/stdin
 
     - name: lint
-      run: ruff check --output-format=github --target-version=py39
+      run: ruff check --output-format=github .
+
+    - name: format
+      run: ruff format --check .
 
     - name: test
       run: pytest -vv

@@ -1,12 +1,14 @@
 from dataclasses import dataclass, fields, field
 from typing import Optional
 
+
 class AllowExtra:
     @classmethod
     def from_dict(cls, data):
         valid_keys = {f.name for f in fields(cls)}
         filtered = {k: v for k, v in data.items() if k in valid_keys}
         return cls(**filtered)
+
 
 @dataclass
 class Station(AllowExtra):
@@ -27,6 +29,7 @@ class Location:
     city: str
     country: str
 
+
 @dataclass
 class Network(AllowExtra):
     id: str
@@ -37,4 +40,4 @@ class Network(AllowExtra):
 
     def __post_init__(self):
         self.stations = [Station.from_dict(s) for s in self.stations]
-        self.location = Location(** self.location)
+        self.location = Location(**self.location)

@@ -49,7 +49,7 @@ class Resource(MutableMapping):
         self.data[key] = value
 
     def request(self, _path=None, **kwargs):
-        kwargs['method'] = 'GET'
+        kwargs["method"] = "GET"
         data = self.client.request(urljoin(self.url, _path), **kwargs).json()
         if self.resource_wrap:
             data = data[self.resource_wrap]

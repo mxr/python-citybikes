@@ -45,3 +45,7 @@ dev = [
 
 [tool.setuptools.dynamic]
 version = {attr = "citybikes.__version__"}
+
+[tool.ruff]
+target-version = "py39"
+src = ["citybikes", "tests"]

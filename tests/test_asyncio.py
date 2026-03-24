@@ -27,7 +27,7 @@ async def test_arbitrary_session_args():
     mock = Mock()
     session_args = {"foo": 42, "bar": 33}
     with patch('aiohttp.ClientSession', mock):
-        Client(user_agent="hello world", ** session_args)
+        Client(user_agent="hello world", **session_args)  # type: ignore[arg-type]  # TODO: Test intentionally passes non-header kwargs through to ClientSession.
         args, kwargs = mock.call_args
         assert session_args.items() <= kwargs.items()
 

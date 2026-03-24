@@ -55,9 +55,9 @@ class TestClient:
         assert len(responses.calls) == 1
         net = next(iter(client.networks))
         assert len(responses.calls) == 1
-        list(net.stations)
-        list(net.stations)
-        list(net.stations)
+        list(net.stations)  # type: ignore[attr-defined]
+        list(net.stations)  # type: ignore[attr-defined]
+        list(net.stations)  # type: ignore[attr-defined]
         assert len(responses.calls) == 2
 
 

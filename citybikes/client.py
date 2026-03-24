@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from typing import Any
+
 import requests
 
 from citybikes import __version__ as _version
@@ -11,7 +13,7 @@ class Client(object):
     DEFAULT_ENDPOINT = 'https://api.citybik.es/'
     USER_AGENT = 'python-citybikes/{version}'.format(version=_version)
 
-    def __init__(self, endpoint=None, headers=None):
+    def __init__(self, endpoint: str | None = None, headers: dict[str, str] | None = None) -> None:
         self.endpoint = endpoint or self.DEFAULT_ENDPOINT
         headers = headers or {}
 
@@ -22,7 +24,7 @@ class Client(object):
         self.session.headers.update(headers)
         self.networks = Networks(self)
 
-    def request(self, url, **kwargs):
+    def request(self, url: str, **kwargs: Any) -> requests.Response:
         kwargs['url'] = url
         return self.session.request(**kwargs)
 
@@ -31,7 +33,7 @@ class Network(Resource):
     uri = '/v2/networks/{uid}'
     resource_wrap = 'network'
 
-    def __init__(self, client, data=None, uid=None):
+    def __init__(self, client: Client, data: dict[str, Any] | None = None, uid: str | None = None) -> None:
         self.uri = data['href'] if data else self.uri.format(uid=uid)
         super(Network, self).__init__(client, data=data)
         self.stations = Stations(client, parent=self)
@@ -42,11 +44,11 @@ class Networks(Resource):
     resource_class = Network
     resource_path = 'networks'
 
-    def near(self, lat, lng):
-        def getter(network):
+    def near(self, lat: float, lng: float) -> list[tuple[Resource, float]]:
+        def getter(network: Resource) -> tuple[float, float]:
             return (network['location']['latitude'],
                     network['location']['longitude'])
-        return dist_sort([lat, lng], iter(self), getter)
+        return dist_sort([lat, lng], list(iter(self)), getter)
 
 
 class Station(Resource):
@@ -57,7 +59,7 @@ class Stations(AbstractResource):
     resource_class = Station
     resource_path = 'stations'
 
-    def near(self, lat, lng):
-        def getter(station):
+    def near(self, lat: float, lng: float) -> list[tuple[Resource, float]]:
+        def getter(station: Resource) -> tuple[float, float]:
             return (station['latitude'], station['longitude'])
-        return dist_sort([lat, lng], iter(self), getter)
+        return dist_sort([lat, lng], list(iter(self)), getter)
